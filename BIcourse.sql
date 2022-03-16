@@ -72,17 +72,22 @@ ORDER BY d.dept_no, calender_year;
 within a certain salary range. Let this range be defined by two values the user can insert when calling the procedure.
 Finally, visualize the obtained result-set in Tableau as a double bar chart.*/
 
-SELECT d.dept_name, round(avg(s.salary),2) as avg_sal, e.gender, year(s.from_date) as calender_year
-FROM
-	t_employees e
-JOIN
-	t_salaries s on s.emp_no = e.emp_no
-JOIN
-	t_dept_emp de on de.emp_no = s.emp_no
-JOIN
-	t_departments d ON d.dept_no = de.dept_no
-GROUP BY d.dept_no, e.gender, calender_year
-HAVING calender_year <= 2002
-ORDER BY d.dept_no, calender_year; 
+DELIMITER $$
+CREATE PROCEDURE sal_range(IN p1 float, IN p2 float)
+BEGIN
+	SELECT  d.dept_name, avg(s.salary) as AVG_SALARY, e.gender  
+    FROM t_salaries s
+			JOIN
+			t_employees e ON s.emp_no = e.emp_no
+            JOIN
+            t_dept_emp de ON de.emp_no = e.emp_no
+            JOIN
+            t_departments d ON d.dept_no = de.dept_no
+	WHERE s.salary BETWEEN p1 and p2
+    GROUP BY d.dept_name, e.gender;
+END $$
+DELIMITER ;
+
+call sal_range(50000,90000);
 
 -- 4 Course Queries --
