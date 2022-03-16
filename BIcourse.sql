@@ -11,7 +11,7 @@ SELECT
     COUNT(e.emp_no) AS no_of_emp
 FROM
     t_employees e
-        JOIN
+    JOIN
     t_dept_emp d ON e.emp_no = d.emp_no
 GROUP BY calender_year, e.gender
 HAVING calender_year >= 1990
@@ -42,11 +42,11 @@ FROM
         t_dept_manager
     GROUP BY calender_year) AS y
         CROSS JOIN
-    t_employees e
+    	t_employees e
         JOIN
-    t_dept_manager dm ON dm.emp_no = e.emp_no
+    	t_dept_manager dm ON dm.emp_no = e.emp_no
         JOIN
-    t_departments d ON d.dept_no = dm.dept_no
+    	t_departments d ON d.dept_no = dm.dept_no
 HAVING y.calender_year >= 1990
 ORDER BY dm.emp_no , y.calender_year;
 
@@ -57,11 +57,11 @@ and add a filter allowing you to see that per each department. */
 SELECT d.dept_name, round(avg(s.salary),2) as avg_sal, e.gender, year(s.from_date) as calender_year
 FROM
 	t_employees e
-JOIN
+	JOIN
 	t_salaries s on s.emp_no = e.emp_no
-JOIN
+	JOIN
 	t_dept_emp de on de.emp_no = s.emp_no
-JOIN
+	JOIN
 	t_departments d ON d.dept_no = de.dept_no
 GROUP BY d.dept_no, e.gender, calender_year
 HAVING calender_year <= 2002
@@ -77,10 +77,10 @@ CREATE PROCEDURE sal_range(IN p1 float, IN p2 float)
 BEGIN
 	SELECT  d.dept_name, avg(s.salary) as AVG_SALARY, e.gender  
     FROM t_salaries s
-			JOIN
-			t_employees e ON s.emp_no = e.emp_no
+	    JOIN
+	    t_employees e ON s.emp_no = e.emp_no
             JOIN
-            t_dept_emp de ON de.emp_no = e.emp_no
+	    t_dept_emp de ON de.emp_no = e.emp_no
             JOIN
             t_departments d ON d.dept_no = de.dept_no
 	WHERE s.salary BETWEEN p1 and p2
